@@ -1,11 +1,8 @@
-# this allows us to use code from
-# the open-source pygame library
-# throughout this file
 import pygame
 import sys
 from constants import *
-from player import *
 from circleshape import *
+from player import *
 from asteroid import *
 from asteroidfield import *
 
@@ -15,7 +12,7 @@ def main():
 
     pygame.init()
     print("Starting asteroids!")
-
+    life = 2
     clock = pygame.time.Clock()
     updatable = pygame.sprite.Group()
     drawable = pygame.sprite.Group()
@@ -52,8 +49,17 @@ def main():
                     points += 1
 
             if player.collisionDetection(thing):
-                print(f"Yore points: {points}")
-                sys.exit("Game over!")
+                if life == 0:
+                    print(f"Yore points: {points}")
+                    sys.exit("Game over!")
+                else:
+                    life -= 1
+                    thing.kill()
+                    screen.fill(RED)
+                    for thing in drawable:
+                        thing.draw(screen)
+                    pygame.display.flip()
+                    dt = clock.tick(60) / 10000
 
         screen.fill(BLACK)
         for thing in drawable:
